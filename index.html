@@ -149,6 +149,34 @@ input[type=number]:focus { border-color: var(--yes-color); }
 .bars-section { display: none; }
 .bars-section.visible { display: block; }
 footer { text-align: center; font-size: 0.75rem; color: var(--muted); margin-top: 2rem; }
+
+/* Tablet */
+@media (max-width: 768px) {
+  header { padding: 1rem 1.5rem; flex-wrap: wrap; justify-content: center; gap: 0.75rem; }
+  .logo-img { height: 70px; }
+  .header-sub { font-size: 1.4rem; flex: 0 0 100%; }
+  .container { padding: 1.25rem 1rem; }
+  .options-grid { grid-template-columns: 1fr 1fr; }
+  .synthese { grid-template-columns: 1fr 1fr; }
+  .bar-lbl { min-width: 120px; }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  header { padding: 1rem; }
+  .logo-img { height: 55px; }
+  .header-sub { font-size: 1.1rem; }
+  .container { padding: 1rem 0.75rem; }
+  .block { padding: 1rem; }
+  .options-grid { grid-template-columns: 1fr; }
+  .synthese { grid-template-columns: 1fr; }
+  .input-row { flex-wrap: wrap; }
+  .slider-wrap { min-width: 100%; }
+  .bar-lbl { min-width: 90px; font-size: 0.72rem; }
+  .bar-amt { min-width: 55px; font-size: 0.72rem; }
+  .synth-row .amt.big { font-size: 1rem; }
+  .tabs { flex-wrap: wrap; }
+}
 </style>
 </head>
 <body>
