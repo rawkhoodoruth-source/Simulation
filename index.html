@@ -36,16 +36,16 @@ body {
   padding: 0 0 4rem;
 }
 header {
-  background: var(--yes-color);
-  padding: 2rem 2.5rem 1.75rem;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  padding: 1.25rem 2.5rem;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
 }
-.logo { font-size: 1.4rem; font-weight: 600; color: #fff; letter-spacing: -0.02em; }
-.logo span { opacity: 0.5; font-weight: 300; margin: 0 6px; }
-.header-sub { font-size: 0.8rem; color: rgba(255,255,255,0.55); font-family: 'DM Mono', monospace; }
+.logo-img { height: 56px; width: auto; }
+.header-sub { font-size: 0.8rem; color: var(--text); font-family: 'DM Mono', monospace; }
 .container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
 .block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.25rem; }
 .block-title {
@@ -105,7 +105,7 @@ input[type=number]:focus { border-color: var(--yes-color); }
 .field-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
 .field-lbl { font-size: 0.8rem; color: var(--muted); flex: 1; }
 .divider { height: 1px; background: var(--border); margin: 1.25rem 0; }
-.synthese { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+.synthese { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
 .synthese-block { border-radius: var(--radius); padding: 1.25rem; border: 1px solid var(--border); }
 .synthese-block.yes { background: var(--yes-light); border-color: #A7C9B4; }
 .synthese-block.franchisee { background: var(--franchisee-light); border-color: #F6C979; }
@@ -153,10 +153,8 @@ footer { text-align: center; font-size: 0.75rem; color: var(--muted); margin-top
 </head>
 <body>
 <header>
-  <div>
-    <div class="logo">YES CONCIERGERIE <span>/</span> Simulateur franchise</div>
-    <div class="header-sub" style="margin-top:4px">Modèle de commission — usage interne &amp; franchisés</div>
-  </div>
+  <img src="logo.png" alt="YES Conciergerie" class="logo-img">
+  <div class="header-sub">Simulateur de commissions franchisés</div>
 </header>
 <div class="container">
   <div class="block">
@@ -219,14 +217,7 @@ footer { text-align: center; font-size: 0.75rem; color: var(--muted); margin-top
   <div class="block">
     <div class="block-title">Synthèse par acteur</div>
     <div class="synthese">
-      <div class="synthese-block yes">
-        <div class="synth-title yes">YES Franchiseur</div>
-        <div class="synth-row"><span class="lbl">Taux facturé</span><span class="amt yes" id="s-yes-rate">—</span></div>
-        <div class="synth-divider"></div>
-        <div class="synth-row"><span class="lbl">Marge / an</span><span class="amt big pos" id="s-yes-margin-an">—</span></div>
-        <div class="synth-row"><span class="lbl">Marge / mois</span><span class="amt pos" id="s-yes-margin-mo">—</span></div>
-      </div>
-      <div class="synthese-block franchisee">
+<div class="synthese-block franchisee">
         <div class="synth-title franchisee">Franchisé</div>
         <div class="synth-row"><span class="lbl">Facturé proprio (an)</span><span class="amt franchisee" id="s-franc-billed">—</span></div>
         <div class="synth-row"><span class="lbl">Coût YES</span><span class="amt neg" id="s-franc-cost">—</span></div>
@@ -256,7 +247,6 @@ footer { text-align: center; font-size: 0.75rem; color: var(--muted); margin-top
     <div id="bars-mix" class="bars-section"></div>
   </div>
 </div>
-<footer>YES CONCIERGERIE — Document interne. Simulateur de commissions franchisés.</footer>
 <script>
 function g(id){ return document.getElementById(id); }
 function v(id){ return parseFloat(g(id).value)||0; }
