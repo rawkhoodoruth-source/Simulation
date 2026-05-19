@@ -45,7 +45,7 @@ header {
   gap: 1rem;
 }
 .logo-img { height: 80px; width: auto; }
-.header-sub { font-size: 1.2rem; color: var(--text); font-family: 'DM Sans', sans-serif; text-align: center; flex: 1; }
+.header-sub { font-size: 1.5rem; font-weight: 600; color: var(--text); font-family: 'DM Sans', sans-serif; text-align: center; flex: 1; }
 .container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
 .block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.25rem; }
 .block-title {
@@ -154,7 +154,7 @@ footer { text-align: center; font-size: 0.75rem; color: var(--muted); margin-top
 <body>
 <header>
   <img src="logo.png" alt="YES Conciergerie" class="logo-img">
-  <div class="header-sub">Simulateur de commissions franchisés</div>
+  <div class="header-sub">Simulateur tarification aux propriétaires</div>
 </header>
 <div class="container">
   <div class="block">
@@ -219,7 +219,7 @@ footer { text-align: center; font-size: 0.75rem; color: var(--muted); margin-top
     <div class="synthese">
 <div class="synthese-block franchisee">
         <div class="synth-title franchisee">Franchisé</div>
-        <div class="synth-row"><span class="lbl">Facturé proprio (an)</span><span class="amt franchisee" id="s-franc-billed">—</span></div>
+        <div class="synth-row"><span class="lbl">Facturé propriétaire (an)</span><span class="amt franchisee" id="s-franc-billed">—</span></div>
         <div class="synth-row"><span class="lbl">Coût YES</span><span class="amt neg" id="s-franc-cost">—</span></div>
         <div class="synth-divider"></div>
         <div class="synth-row"><span class="lbl">Marge / an</span><span class="amt big" id="s-franc-margin-an">—</span></div>
@@ -261,7 +261,7 @@ function optResult(billed_an, yes_cost_an, ca_an){
     +'<div class="opt-line"><span class="lbl">= par mois</span><span class="val info">'+fmt(billed_an/12)+'</span></div>'
     +'<div class="opt-line"><span class="lbl">Coût YES</span><span class="val neg">−'+fmt(yes_cost_an)+'</span></div>'
     +'<div class="opt-line"><span class="lbl">Marge / mois</span><span class="val '+(ok?'pos':'neg')+'">'+fmt(mo)+'</span></div>'
-    +'<div class="opt-verdict">'+(ok?'✅':'⚠')+' Proprio paie '+fmtP(pct)+' du CA</div>';
+    +'<div class="opt-verdict">'+(ok?'✅':'⚠')+' Propriétaire paie '+fmtP(pct)+' du CA</div>';
 }
 function barRow(label, val, color, ca){
   var w = Math.max(0, val/ca*100);
