@@ -314,9 +314,6 @@ function calc(){
   });
   var rec_billed = [fix_an, pct_an, mix_an][best];
   var rec_m      = margins[best];
-  g('s-yes-rate').textContent       = fmtP(yes_r*100)+' du CA';
-  g('s-yes-margin-an').textContent  = fmt(yes_marge);
-  g('s-yes-margin-mo').textContent  = fmt(yes_marge/12)+' / mois';
   g('s-franc-billed').textContent     = fmt(rec_billed)+' / an';
   g('s-franc-cost').textContent       = '− '+fmt(yes_cost)+' / an';
   var franc_cls = rec_m>0?'amt big pos':'amt big neg';
