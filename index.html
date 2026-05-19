@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YES CONCIERGERIE — Simulateur de commissions</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F6F3;
+  --surface: #FFFFFF;
+  --surface2: #F0EFE9;
+  --border: #E2E0D8;
+  --text: #1A1916;
+  --muted: #7A7870;
+  --yes-color: #1B4332;
+  --yes-light: #D8EDDF;
+  --franchisee-color: #7C3D12;
+  --franchisee-light: #FEF3C7;
+  --owner-color: #1E3A5F;
+  --owner-light: #DBEAFE;
+  --success: #166534;
+  --success-bg: #DCFCE7;
+  --danger: #991B1B;
+  --danger-bg: #FEE2E2;
+  --accent: #1B4332;
+  --radius: 12px;
+  --radius-sm: 7px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 0 0 4rem;
+}
+header {
+  background: var(--yes-color);
+  padding: 2rem 2.5rem 1.75rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.logo { font-size: 1.4rem; font-weight: 600; color: #fff; letter-spacing: -0.02em; }
+.logo span { opacity: 0.5; font-weight: 300; margin: 0 6px; }
+.header-sub { font-size: 0.8rem; color: rgba(255,255,255,0.55); font-family: 'DM Mono', monospace; }
+.container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
+.block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.25rem; }
+.block-title {
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 1.25rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.block-title::before {
+  content: ''; display: block; width: 3px; height: 14px;
+  border-radius: 2px; background: currentColor;
+}
+.block-title.yes::before { background: var(--yes-color); }
+.block-title.franchisee::before { background: var(--franchisee-color); }
+.block-title.owner::before { background: var(--owner-color); }
+.input-row { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+.input-row:last-child { margin-bottom: 0; }
+.input-label { font-size: 0.875rem; color: var(--muted); flex: 1; }
+.input-wrap { display: flex; align-items: center; gap: 6px; }
+.slider-wrap { display: flex; align-items: center; gap: 10px; flex: 1; }
+input[type=range] {
+  -webkit-appearance: none; flex: 1; height: 4px;
+  background: var(--border); border-radius: 2px; outline: none;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 18px; height: 18px;
+  background: var(--yes-color); border-radius: 50%; cursor: pointer;
+}
+input[type=number] {
+  width: 90px; padding: 7px 10px; border: 1px solid var(--border);
+  border-radius: var(--radius-sm); font-family: 'DM Mono', monospace;
+  font-size: 0.9rem; font-weight: 500; color: var(--text);
+  background: var(--surface); text-align: right; outline: none;
+  transition: border-color 0.15s;
+}
+input[type=number]:focus { border-color: var(--yes-color); }
+.unit { font-size: 0.8rem; color: var(--muted); font-family: 'DM Mono', monospace; min-width: 20px; }
+.val-display {
+  font-family: 'DM Mono', monospace; font-size: 1rem; font-weight: 500;
+  min-width: 90px; text-align: right; color: var(--text);
+}
+.options-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.25rem; }
+.opt-card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--radius); padding: 1.25rem; transition: border-color 0.2s;
+}
+.opt-card.best { border-color: var(--franchisee-color); background: #FFFBF5; }
+.opt-label {
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem;
+}
+.opt-badge {
+  display: inline-block; font-size: 0.65rem; font-weight: 600;
+  padding: 2px 8px; border-radius: 99px; letter-spacing: 0.06em;
+  background: var(--franchisee-light); color: var(--franchisee-color);
+  margin-bottom: 0.5rem; text-transform: uppercase;
+}
+.field-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.field-lbl { font-size: 0.8rem; color: var(--muted); flex: 1; }
+.divider { height: 1px; background: var(--border); margin: 1.25rem 0; }
+.synthese { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+.synthese-block { border-radius: var(--radius); padding: 1.25rem; border: 1px solid var(--border); }
+.synthese-block.yes { background: var(--yes-light); border-color: #A7C9B4; }
+.synthese-block.franchisee { background: var(--franchisee-light); border-color: #F6C979; }
+.synthese-block.owner { background: var(--owner-light); border-color: #93C5FD; }
+.synth-title { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 1rem; }
+.synth-title.yes { color: var(--yes-color); }
+.synth-title.franchisee { color: var(--franchisee-color); }
+.synth-title.owner { color: var(--owner-color); }
+.synth-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; font-size: 0.82rem; }
+.synth-row .lbl { color: var(--muted); }
+.synth-row .amt { font-weight: 600; font-family: 'DM Mono', monospace; font-size: 0.85rem; }
+.synth-row .amt.big { font-size: 1.15rem; }
+.synth-row .amt.pos { color: var(--success); }
+.synth-row .amt.neg { color: var(--danger); }
+.synth-row .amt.yes { color: var(--yes-color); }
+.synth-row .amt.owner { color: var(--owner-color); }
+.synth-row .amt.franchisee { color: var(--franchisee-color); }
+.synth-divider { height: 1px; background: rgba(0,0,0,0.08); margin: 8px 0; }
+.bars-grid { display: grid; grid-template-columns: 1fr; gap: 0.6rem; }
+.bar-row2 { display: flex; align-items: center; gap: 10px; }
+.bar-lbl { font-size: 0.8rem; color: var(--muted); min-width: 160px; }
+.bar-track { flex: 1; height: 22px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+.bar-seg { height: 100%; display: flex; align-items: center; padding-left: 8px; font-size: 0.7rem; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; }
+.bar-amt { font-family: 'DM Mono', monospace; font-size: 0.8rem; font-weight: 500; min-width: 70px; text-align: right; color: var(--text); }
+.opt-results { margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border); }
+.opt-line { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px; }
+.opt-line .lbl { color: var(--muted); }
+.opt-line .val { font-weight: 600; font-family: 'DM Mono', monospace; }
+.opt-line .val.pos { color: var(--success); }
+.opt-line .val.neg { color: var(--danger); }
+.opt-line .val.info { color: var(--owner-color); }
+.opt-verdict { margin-top: 6px; font-size: 0.73rem; color: var(--muted); font-style: italic; }
+.tabs { display: flex; gap: 4px; margin-bottom: 1rem; }
+.tab {
+  font-size: 0.75rem; font-weight: 500; padding: 5px 14px;
+  border-radius: 99px; border: 1px solid var(--border);
+  background: var(--surface2); color: var(--muted);
+  cursor: pointer; transition: all 0.15s; user-select: none;
+}
+.tab.active { background: var(--yes-color); color: #fff; border-color: var(--yes-color); }
+.bars-section { display: none; }
+.bars-section.visible { display: block; }
+footer { text-align: center; font-size: 0.75rem; color: var(--muted); margin-top: 2rem; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="logo">YES CONCIERGERIE <span>/</span> Simulateur franchise</div>
+    <div class="header-sub" style="margin-top:4px">Modèle de commission — usage interne &amp; franchisés</div>
+  </div>
+</header>
+<div class="container">
+  <div class="block">
+    <div class="block-title yes">Paramètre principal</div>
+    <div class="input-row">
+      <span class="input-label">Loyer annuel brut du logement</span>
+      <div class="slider-wrap">
+        <input type="range" min="3000" max="80000" value="15000" step="500" id="sl-ca" oninput="calc()">
+        <span class="val-display" id="lbl-ca">15 000 €</span>
+      </div>
+    </div>
+    <div class="input-row">
+      <span class="input-label">Taux YES franchiseur (facturé au franchisé)</span>
+      <div class="input-wrap">
+        <input type="number" min="0" max="20" step="0.1" value="3.2" id="in-yes" oninput="calc()">
+        <span class="unit">%</span>
+      </div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="block-title franchisee">Options franchisé → propriétaire</div>
+    <div class="options-grid">
+      <div class="opt-card" id="opt-fix">
+        <div id="badge-fix"></div>
+        <div class="opt-label">Forfait fixe</div>
+        <div class="field-row">
+          <span class="field-lbl">Montant / mois</span>
+          <input type="number" min="0" step="1" value="120" id="in-fix" oninput="calc()">
+          <span class="unit">€</span>
+        </div>
+        <div class="opt-results" id="res-fix"></div>
+      </div>
+      <div class="opt-card" id="opt-pct">
+        <div id="badge-pct"></div>
+        <div class="opt-label">Taux % pur</div>
+        <div class="field-row">
+          <span class="field-lbl">Taux %</span>
+          <input type="number" min="0" max="50" step="0.1" value="8" id="in-pct" oninput="calc()">
+          <span class="unit">%</span>
+        </div>
+        <div class="opt-results" id="res-pct"></div>
+      </div>
+      <div class="opt-card" id="opt-mix">
+        <div id="badge-mix"></div>
+        <div class="opt-label">Mixte</div>
+        <div class="field-row">
+          <span class="field-lbl">Taux %</span>
+          <input type="number" min="0" max="50" step="0.1" value="4" id="in-mx-pct" oninput="calc()">
+          <span class="unit">%</span>
+        </div>
+        <div class="field-row">
+          <span class="field-lbl">Fixe / mois</span>
+          <input type="number" min="0" step="1" value="60" id="in-mx-fix" oninput="calc()">
+          <span class="unit">€</span>
+        </div>
+        <div class="opt-results" id="res-mix"></div>
+      </div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="block-title">Synthèse par acteur</div>
+    <div class="synthese">
+      <div class="synthese-block yes">
+        <div class="synth-title yes">YES Franchiseur</div>
+        <div class="synth-row"><span class="lbl">Taux facturé</span><span class="amt yes" id="s-yes-rate">—</span></div>
+        <div class="synth-divider"></div>
+        <div class="synth-row"><span class="lbl">Marge / an</span><span class="amt big pos" id="s-yes-margin-an">—</span></div>
+        <div class="synth-row"><span class="lbl">Marge / mois</span><span class="amt pos" id="s-yes-margin-mo">—</span></div>
+      </div>
+      <div class="synthese-block franchisee">
+        <div class="synth-title franchisee">Franchisé</div>
+        <div class="synth-row"><span class="lbl">Facturé proprio (an)</span><span class="amt franchisee" id="s-franc-billed">—</span></div>
+        <div class="synth-row"><span class="lbl">Coût YES</span><span class="amt neg" id="s-franc-cost">—</span></div>
+        <div class="synth-divider"></div>
+        <div class="synth-row"><span class="lbl">Marge / an</span><span class="amt big" id="s-franc-margin-an">—</span></div>
+        <div class="synth-row"><span class="lbl">Marge / mois</span><span class="amt" id="s-franc-margin-mo">—</span></div>
+        <div class="synth-row" style="margin-top:6px"><span class="lbl" style="font-size:0.72rem">Scénario retenu</span><span class="amt franchisee" id="s-franc-scenario" style="font-size:0.72rem">—</span></div>
+      </div>
+      <div class="synthese-block owner">
+        <div class="synth-title owner">Propriétaire</div>
+        <div class="synth-row"><span class="lbl">CA brut / an</span><span class="amt owner" id="s-own-ca">—</span></div>
+        <div class="synth-row"><span class="lbl">Frais gestion / an</span><span class="amt neg" id="s-own-fees">—</span></div>
+        <div class="synth-row"><span class="lbl">dont / mois</span><span class="amt info owner" id="s-own-fees-mo">—</span></div>
+        <div class="synth-divider"></div>
+        <div class="synth-row"><span class="lbl">CA net / an</span><span class="amt big owner" id="s-own-net">—</span></div>
+        <div class="synth-row"><span class="lbl">% frais / CA</span><span class="amt" id="s-own-pct">—</span></div>
+      </div>
+    </div>
+    <div class="block-title" style="margin-top:0.5rem">Répartition du CA annuel</div>
+    <div class="tabs">
+      <div class="tab active" onclick="showBars('fix',this)">Forfait</div>
+      <div class="tab" onclick="showBars('pct',this)">Taux %</div>
+      <div class="tab" onclick="showBars('mix',this)">Mixte</div>
+    </div>
+    <div id="bars-fix" class="bars-section visible"></div>
+    <div id="bars-pct" class="bars-section"></div>
+    <div id="bars-mix" class="bars-section"></div>
+  </div>
+</div>
+<footer>YES CONCIERGERIE — Document interne. Simulateur de commissions franchisés.</footer>
+<script>
+function g(id){ return document.getElementById(id); }
+function v(id){ return parseFloat(g(id).value)||0; }
+function fmt(n){ return Math.round(n).toLocaleString('fr-FR')+' €'; }
+function fmtP(n){ return (+n).toFixed(1)+'%'; }
+function optResult(billed_an, yes_cost_an, ca_an){
+  var m = billed_an - yes_cost_an;
+  var mo = m/12;
+  var pct = billed_an/ca_an*100;
+  var ok = m > 0;
+  return '<div class="opt-line"><span class="lbl">Facturé / an</span><span class="val">'+fmt(billed_an)+'</span></div>'
+    +'<div class="opt-line"><span class="lbl">= par mois</span><span class="val info">'+fmt(billed_an/12)+'</span></div>'
+    +'<div class="opt-line"><span class="lbl">Coût YES</span><span class="val neg">−'+fmt(yes_cost_an)+'</span></div>'
+    +'<div class="opt-line"><span class="lbl">Marge / mois</span><span class="val '+(ok?'pos':'neg')+'">'+fmt(mo)+'</span></div>'
+    +'<div class="opt-verdict">'+(ok?'✅':'⚠')+' Proprio paie '+fmtP(pct)+' du CA</div>';
+}
+function barRow(label, val, color, ca){
+  var w = Math.max(0, val/ca*100);
+  return '<div class="bar-row2"><span class="bar-lbl">'+label+'</span>'
+    +'<div class="bar-track"><div class="bar-seg" style="width:'+w.toFixed(1)+'%;background:'+color+';">'
+    +(w>7?fmt(val):'')+'</div></div>'
+    +'<span class="bar-amt">'+fmt(val)+'</span></div>';
+}
+function buildBars(id, label, owner_net, franc_m, yes_m, ca){
+  g('bars-'+id).innerHTML = '<div class="bars-grid">'
+    + barRow('Propriétaire (net)', Math.max(0,owner_net), '#1E3A5F', ca)
+    + barRow('Franchisé (marge)',  Math.max(0,franc_m),   '#7C3D12', ca)
+    + barRow('YES CONCIERGERIE',   yes_m,                 '#1B4332', ca)
+    + '</div>';
+}
+var activeTab = 'fix';
+function showBars(id, el){
+  activeTab = id;
+  document.querySelectorAll('.bars-section').forEach(function(s){ s.classList.remove('visible'); });
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  g('bars-'+id).classList.add('visible');
+  el.classList.add('active');
+}
+function calc(){
+  var ca    = +g('sl-ca').value;
+  var yes_r = v('in-yes')/100;
+  var fix_mo= v('in-fix');
+  var pct_r = v('in-pct')/100;
+  var mx_r  = v('in-mx-pct')/100;
+  var mx_fix= v('in-mx-fix');
+  g('lbl-ca').textContent = ca.toLocaleString('fr-FR')+' €';
+  var yes_cost  = ca * yes_r;
+  var yes_marge = ca * Math.max(0, yes_r - 0.025);
+  var fix_an = fix_mo*12;
+  var pct_an = ca*pct_r;
+  var mix_an = ca*mx_r + mx_fix*12;
+  var fix_m = fix_an - yes_cost;
+  var pct_m = pct_an - yes_cost;
+  var mix_m = mix_an - yes_cost;
+  g('res-fix').innerHTML = optResult(fix_an, yes_cost, ca);
+  g('res-pct').innerHTML = optResult(pct_an, yes_cost, ca);
+  g('res-mix').innerHTML = optResult(mix_an, yes_cost, ca);
+  var margins = [fix_m, pct_m, mix_m];
+  var best = margins.indexOf(Math.max(...margins));
+  var ids = ['fix','pct','mix'];
+  var names = ['Forfait fixe', 'Taux % pur', 'Mixte'];
+  ids.forEach(function(id,i){
+    g('opt-'+id).className = 'opt-card'+(i===best?' best':'');
+    g('badge-'+id).innerHTML = i===best?'<div class="opt-badge">Meilleure marge</div>':'';
+  });
+  var rec_billed = [fix_an, pct_an, mix_an][best];
+  var rec_m      = margins[best];
+  g('s-yes-rate').textContent       = fmtP(yes_r*100)+' du CA';
+  g('s-yes-margin-an').textContent  = fmt(yes_marge);
+  g('s-yes-margin-mo').textContent  = fmt(yes_marge/12)+' / mois';
+  g('s-franc-billed').textContent     = fmt(rec_billed)+' / an';
+  g('s-franc-cost').textContent       = '− '+fmt(yes_cost)+' / an';
+  var franc_cls = rec_m>0?'amt big pos':'amt big neg';
+  g('s-franc-margin-an').className    = franc_cls;
+  g('s-franc-margin-an').textContent  = fmt(rec_m);
+  g('s-franc-margin-mo').className    = rec_m>0?'amt pos':'amt neg';
+  g('s-franc-margin-mo').textContent  = fmt(rec_m/12)+' / mois';
+  g('s-franc-scenario').textContent   = names[best];
+  var own_fees = rec_billed;
+  var own_net  = ca - own_fees;
+  var own_pct  = own_fees/ca*100;
+  var pct_cls  = own_pct>20?'amt neg':'amt owner';
+  g('s-own-ca').textContent       = fmt(ca);
+  g('s-own-fees').textContent     = '− '+fmt(own_fees)+' / an';
+  g('s-own-fees-mo').textContent  = fmt(own_fees/12)+' / mois';
+  g('s-own-net').textContent      = fmt(own_net);
+  g('s-own-pct').className        = pct_cls;
+  g('s-own-pct').textContent      = fmtP(own_pct)+(own_pct>20?' ⚠':'');
+  buildBars('fix', 'Forfait', ca-fix_an, fix_m, yes_marge, ca);
+  buildBars('pct', 'Taux %',  ca-pct_an, pct_m, yes_marge, ca);
+  buildBars('mix', 'Mixte',   ca-mix_an, mix_m, yes_marge, ca);
+}
+calc();
+</script>
+</body>
+</html>
